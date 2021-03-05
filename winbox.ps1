@@ -19,22 +19,23 @@
 #
 #You will also need to have your winbox.exe file in your "Downloads" folder. I don't know enough Windows scripting to make this more flexible. Not sorry.
 
+#There is absolutly no security in this program... I would bet there's at least 12 different issues with what I am doing... Practice safe link clicking.
+
 param ($address, $username, $password)
 
-#$address #Diagnostics cruft
-#$input = Read-Host "Press Enter to continue" #Diagnostics cruft
 
 $data = $address.Substring(0,9)
-#$data #Diagnostics cruft
 $i = $address.IndexOf("?")
 
-#$i
+#Here we take the URL and try to parse it into IP address/HostName, Username and password
+#It might be smart to add in the ability to handle situations where there isn't a password passed. 
+#Probably would be better to do something along the lines of hostname:port?usr=username?pass=password... I dunno.
+#I could probably optimize this a lot more, but this is alright for my needs. 
 if ($data -eq "winbox:\\") #Firefox and normal Windows, not Edge.
 {
 	#extract the DNS name/IP Address
 	$data = $address
 	$address = $data.Substring(9,$i - 9)
-	#$address #Diagnostics cruft
 	$j = $address.IndexOf(":")
 	if ($j -eq $null)
 	{
@@ -43,7 +44,6 @@ if ($data -eq "winbox:\\") #Firefox and normal Windows, not Edge.
 	{
 		
 		$address = $address.Substring(0, $j)
-		#$address #Diagnostics cruft
 	} 
 	
 	
@@ -53,17 +53,13 @@ if ($data -eq "winbox:\\") #Firefox and normal Windows, not Edge.
 	$data = $data.Substring($i, $j - $i)
 	$i = $data.IndexOf("?")
 	$username = $data.Substring(0, $i)
-	#$username  #Diagnostics cruft
 	
-	#Get Password
 	$i = $data.IndexOf("?")
 	$i = $i + 1
 	$j = $data.length
 	$password = $data.Substring($i, $j - $i)
-	#$password #Diagnostics cruft
 }
 
-#I could probably optimize this a lot more, but this is alright for my needs. 
 if ($data -eq "winbox:%5") #Chrome and Edge, maybe a few other browsers. 
 {
 	#extract the DNS name/IP Address
@@ -77,7 +73,6 @@ if ($data -eq "winbox:%5") #Chrome and Edge, maybe a few other browsers.
 	{
 		
 		$address = $address.Substring(0, $j)
-		#$address #Diagnostics cruft
 	} 
 	
 	
@@ -87,19 +82,12 @@ if ($data -eq "winbox:%5") #Chrome and Edge, maybe a few other browsers.
 	$data = $data.Substring($i, $j - $i)
 	$i = $data.IndexOf("?")
 	$username = $data.Substring(0, $i)
-	#$username #Diagnostics cruft
 	
 	#Get Password
 	$i = $data.IndexOf("?")
 	$i = $i + 1
 	$j = $data.length
 	$password = $data.Substring($i, $j - $i)
-	#$password #Diagnostics cruft
 }
-#$wtf = Get-Location #Diagnostics cruft
-#$wtf #Diagnostics cruft
 $wtf = "$Home\Downloads\winbox.exe"
 Start-Process -FilePath $wtf -ArgumentList "$address", "$username", "$password"
-#$error #Diagnostics cruft
-
-#$input = Read-Host "Press Enter to continue" #Diagnostics cruft

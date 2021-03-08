@@ -8,3 +8,6 @@ You will need to use PS2EXE to compile the powershell script into a .exe which i
 I will be supplying the .exe file it'self as well as a registry key you can import and edit for yourself. Maybe if I get the gumption up someday I will figure out how to edit the registry from a powershell script then you can just call winboxcommand.exe with like -setup and it will set itself up. That would be slick.
 
 Another requirement: winboxcommand.exe and winbox.ps1 needs to be in the same directory as winbox.exe, probably would be good to setup a configuration deal to let you put it wherever and winbox wherever... 
+
+You will also need to edit the winboxcommand.reg file, the last line is "@="\"C:\\Users\\yourusernamehere\\Downloads\\winboxcommand.exe\" \"%1\""" 
+You will want to change the directory to where your winboxcommand.exe file is located. 
